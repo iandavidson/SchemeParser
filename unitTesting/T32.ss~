@@ -1,0 +1,13 @@
+(symbol? 'a) ; rule 32
+
+(zero? 0) ;rule 34
+
+(string? "foobar") ;rule 36
+
+(- 5 8) ;rule 38
+
+(* 4 4) ;rule 40
+
+(= 5 7) ; rule 42
+
+(
