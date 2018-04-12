@@ -1,5 +1,12 @@
 ;follow actual  structure, all start with define
 
+(define (isList a) (if (list? a) a 'param_passed_is_not_list)) ;rule 24 ; rule 33
+
+(define (carList a) (car a)) ;rule 26
+
+(define (PositiveNumber a) (and (number? a) (<= 0 a))) ;rule 28 
+
+(define (NotList a) (not (list? a))) ; rule 30 
 
 (define (isSymbol a) (symbol? a)) ; rule 32
 
