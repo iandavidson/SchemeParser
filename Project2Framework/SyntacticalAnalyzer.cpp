@@ -98,6 +98,11 @@ int SyntacticalAnalyzer::define ()
 
 	//do specific rule related procedure
 
+	//rule 2 <def> => LPAREN_T, DEFINE_T LPAREN_T IDENT_T <param_list> RPAREN_T <stmt> <stmt_list> RPAREN_T
+	
+
+
+
 
 	return errors;
 
