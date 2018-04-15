@@ -24,7 +24,8 @@ using namespace std;
 *                                                                              *
 * Parameters:                                                                  *
 * Return value:                                                                *
-* Description: This function will                                              *
+* Description: This function will get the first token and initilize			   *
+* lexical analysis                            								   *
 *******************************************************************************/
 SyntacticalAnalyzer::SyntacticalAnalyzer (char * filename)
 {
@@ -58,7 +59,7 @@ SyntacticalAnalyzer::~SyntacticalAnalyzer ()
 *******************************************************************************/
 int SyntacticalAnalyzer::Program ()
 {
-//definitly not done
+//program=> define, more_defines, EOF_T
 
 	p2file << "Entering Program function; current token is: "
 					<< lex->GetTokenName (token) << endl;
@@ -66,8 +67,20 @@ int SyntacticalAnalyzer::Program ()
 	// token should be in firsts of Program
 	// Body of function goes here.
 	p2file << "Using Rule 1" << endl;
-	//errors += Define ();
-	//errors += More_Defines ();
+	
+	if(token == LPAREN_T){
+	
+		errors += Define ();
+		
+		errors += More_Defines ();
+	
+	}else{
+
+		errors++;
+		lex->ReportError ("missing first opening paren at beggingn of program; found: " + lex->GetTokenName (token) );
+	
+	}
+
 	if (token != EOF_T)
 	{
 		errors++;
@@ -88,6 +101,10 @@ int SyntacticalAnalyzer::Program ()
 * Return value:                                                                *
 * Description: This function will                                              *
 *******************************************************************************/
+
+//todo: figure out if we should check for firsts of the functin we are about to call and
+//go into. B/c we are going to do the same check inside the function, seems like we would skip over rules
+//Or maybe it doesnt play a difference if we dont have error recovery. :P
 int SyntacticalAnalyzer::define ()
 {
 
@@ -100,9 +117,59 @@ int SyntacticalAnalyzer::define ()
 
 	//rule 2 <def> => LPAREN_T, DEFINE_T LPAREN_T IDENT_T <param_list> RPAREN_T <stmt> <stmt_list> RPAREN_T
 	
+	if(token == LPAREN_T){
+		token = lex->GetToken();
+	}else{
+		errors++;
+		lex->ReportError("expecting first LPAREN_T at middle of define, found: "  + lex->GetTokenName (token));
+	}
+
+	if(token == DEFINE_T){
+		token = lex->GetToken();
+	}else{
+		errors++;
+		lex->ReportError("expecting first DEFINE_T at middle of define, found: "  + lex->GetTokenName (token));
+	}
 
 
+	if(token == LPAREN_T){
+		token = lex->GetToken();
+	}else{
+		errors++;
+		lex->ReportError("expecting second LPAREN_T at begining of define, found: "  + lex->GetTokenName (token));
+	}	
 
+	
+	if(token == IDENT_T){
+
+		token = lex->GetToken();
+	}else{
+		errors++;
+		lex->ReportError("expecting first IDENT_T, found: " + lex->GetTokenName(token));
+	}
+
+	//if member of first of param_list
+	//not sure if this should be checked for here or if we should just call param_list and do this checking there :/
+	errors += param_list();
+
+	if(token == RPAREN_T){
+		token = lex->GetToken();
+	}else{
+		errors++;
+		lex->ReportError("expecting first RPAREN_T, found: " + lex->GetTokenName(token));
+	}
+
+	errors += stmt();
+
+
+	errors += stmt_list();
+
+	if(token == RPAREN_T){
+		token = lex->GetToken();
+	}else{
+		errors++;
+		lex->ReportError("expecting second RPAREN_T, found: " + lex->GetTokenName(token));
+	}
 
 	return errors;
 
@@ -119,7 +186,11 @@ int SyntacticalAnalyzer::define ()
 *******************************************************************************/
 int SyntacticalAnalyzer::more_defines ()
 {
-	
+	/*
+3. <more_defines> -> <define> <more_defines>
+4. <more_defines> -> λ
+
+	*/
 	cout << "Entering function: more_defines() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 	int errors = 0;
 	//check if current token is in first and follows of respective
@@ -127,6 +198,21 @@ int SyntacticalAnalyzer::more_defines ()
 
 	//do specific rule related procedure
 
+	//if first of define (LPAREN_T)
+		//errors += define();
+
+		//if first of more_defines(LPAREN_T, EOF_T)
+			//errors += stmt_list();
+
+
+
+	//else if follows of define //being the lambda definition
+		//do nothing we coo
+
+
+	//else 
+		//errors++;
+		//ReportError("expecting first or follows of define; found: " + lex->GetTokenName(token));
 
 	return errors;
 
@@ -144,12 +230,32 @@ int SyntacticalAnalyzer::more_defines ()
 *******************************************************************************/
 int SyntacticalAnalyzer::stmt_list ()
 {
+/*
+	5. <stmt_list> -> <stmt> <stmt_list>
+	6. <stmt_list> -> λ
+	
+*/
+
 cout << "Entering function: stmt_list() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 int errors = 0;
 //check if current token is in first and follows of respective
 
 
 //do specific rule related procedure
+
+
+//if(token == IDENT_T, LPAREN_T, NUMLIT_T, STRLIT_T, QUOTE_T)
+	//errors+= stmt();
+
+	//if(first of stmt_list)
+	//errors+= stmt_list();
+
+//else if (token == RPAREN_T)
+	//we chillin lambda case
+
+//else
+	//errors++;
+	//ReportError("Expected the first of stmt_list but found: " + lex->GetTokenName(token));
 
 
 return errors;
@@ -170,12 +276,22 @@ return errors;
 int SyntacticalAnalyzer::stmt ()
 {
 
+	/*
+
+	7. <stmt> -> <literal>
+	8. <stmt> -> IDENT_T
+	9. <stmt> -> LPAREN_T <action> RPAREN_T
+
+	*/
+
 	cout << "Entering function: stmt() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 	int errors = 0;
 	//check if current token is in first and follows of respective
 
 
 	//do specific rule related procedure
+
+
 
 
 	return errors;
@@ -193,6 +309,14 @@ int SyntacticalAnalyzer::stmt ()
 *******************************************************************************/
 int SyntacticalAnalyzer::literal ()
 {
+/*
+
+10. <literal> -> NUMLIT_T
+11. <literal> -> STRLIT_T
+12. <literal> -> QUOTE_T <quoted_lit>
+
+*/
+
 	cout << "Entering function: literal() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 	int errors = 0;
 	//check if current token is in first and follows of respective
@@ -218,6 +342,13 @@ int SyntacticalAnalyzer::literal ()
 *******************************************************************************/
 int SyntacticalAnalyzer::quoted_lit ()
 {
+
+
+	/*
+	13. <quoted_lit> -> <any_other_token>
+	
+	*/
+
 	cout << "Entering function: quoted_lit() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 	int errors = 0;
 	//check if current token is in first and follows of respective
@@ -238,6 +369,14 @@ int SyntacticalAnalyzer::quoted_lit ()
 *******************************************************************************/
 int SyntacticalAnalyzer::more_tokens ()
 {
+/*
+
+14. <more_tokens> -> <any_other_token> <more_tokens>
+15. <more_tokens> -> λ
+
+*/
+
+
 	cout << "Entering function: more_tokens() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 	int errors = 0;
 	//check if current token is in first and follows of respective
@@ -260,6 +399,13 @@ int SyntacticalAnalyzer::more_tokens ()
 *******************************************************************************/
 int SyntacticalAnalyzer::param_list ()
 {
+
+/*
+
+	16. <param_list> -> IDENT_T <param_list>
+	17. <param_list> -> λ
+
+*/	
 	cout << "Entering function: param_list() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 	int errors = 0;
 	//check if current token is in first and follows of respective
@@ -284,7 +430,10 @@ int SyntacticalAnalyzer::param_list ()
 * Description: This function will                                              *
 *******************************************************************************/
 int SyntacticalAnalyzer::else_part ()
-{
+{	/*
+	18. <else_part> -> <stmt>
+	19. <else_part> -> λ
+	*/
 
 	cout << "Entering function: else_part() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 	int errors = 0;
@@ -309,6 +458,10 @@ int SyntacticalAnalyzer::else_part ()
 *******************************************************************************/
 int SyntacticalAnalyzer::stmt_pair()
 {
+	/*
+20. <stmt_pair> -> LPAREN_T <stmt_pair_body>
+21. <stmt_pair> -> λ
+	*/
 	
 	cout << "Entering function: stmt_pair() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 	int errors = 0;
@@ -333,6 +486,12 @@ int SyntacticalAnalyzer::stmt_pair()
 *******************************************************************************/
 int SyntacticalAnalyzer::stmt_pair_body()
 {
+
+/*
+	22. <stmt_pair_body> -> <stmt> <stmt> RPAREN_T <stmt_pair>
+	23. <stmt_pair_body> -> ELSE_T <stmt> RPAREN_T
+*/
+
 	cout << "Entering function: stmt_pair_body() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 	int errors = 0;
 	//check if current token is in first and follows of respective
@@ -356,7 +515,36 @@ int SyntacticalAnalyzer::stmt_pair_body()
 *******************************************************************************/
 int SyntacticalAnalyzer::action()
 {
+/*
+	
+24. <action> -> IF_T <stmt> <stmt> <else_part>
+25. <action> -> COND_T LPAREN_T <stmt_pair_body>
+26. <action> -> LISTOP_T <stmt>
+27. <action> -> CONS_T <stmt> <stmt>
+28. <action> -> AND_T <stmt_list>
+29. <action> -> OR_T <stmt_list>
+30. <action> -> NOT_T <stmt>
+31. <action> -> NUMBERP_T <stmt>
+32. <action> -> SYMBOLP_T <stmt>
+33. <action> -> LISTP_T <stmt>
+34. <action> -> ZEROP_T <stmt>
+35. <action> -> NULLP_T <stmt>
+36. <action> -> STRINGP_T <stmt>
+37. <action> -> PLUS_T <stmt_list>
+38. <action> -> MINUS_T <stmt> <stmt_list>
+39. <action> -> DIV_T <stmt> <stmt_list>
+40. <action> -> MULT_T <stmt_list>
+41. <action> -> MODULO_T <stmt> <stmt>
+42. <action> -> EQUALTO_T <stmt_list>
+43. <action> -> GT_T <stmt_list>
+44. <action> -> LT_T <stmt_list>
+45. <action> -> GTE_T <stmt_list>
+46. <action> -> LTE_T <stmt_list>
+47. <action> -> IDENT_T <stmt_list>
+48. <action> -> DISPLAY_T <stmt>
+49. <action> -> NEWLINE_T
 
+*/
 	cout << "Entering function: action() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 	int errors = 0;
 	//check if current token is in first and follows of respective
@@ -379,7 +567,42 @@ int SyntacticalAnalyzer::action()
 *******************************************************************************/
 int SyntacticalAnalyzer::any_other_token()
 {
-	
+	/*
+
+	50. <any_other_token> -> LPAREN_T <more_tokens> RPAREN_T
+51. <any_other_token> -> IDENT_T
+52. <any_other_token> -> NUMLIT_T
+53. <any_other_token> -> STRLIT_T
+54. <any_other_token> -> CONS_T
+55. <any_other_token> -> IF_T
+56. <any_other_token> -> DISPLAY_T
+57. <any_other_token> -> NEWLINE_T
+58. <any_other_token> -> LISTOP_T
+59. <any_other_token> -> AND_T
+60. <any_other_token> -> OR_T
+61. <any_other_token> -> NOT_T
+62. <any_other_token> -> DEFINE_T
+63. <any_other_token> -> NUMBERP_T
+64. <any_other_token> -> SYMBOLP_T
+65. <any_other_token> -> LISTP_T
+66. <any_other_token> -> ZEROP_T
+67. <any_other_token> -> NULLP_T
+68. <any_other_token> -> STRINGP_T
+69. <any_other_token> -> PLUS_T
+70. <any_other_token> -> MINUS_T
+71. <any_other_token> -> DIV_T
+72. <any_other_token> -> MULT_T
+73. <any_other_token> -> MODULO_T
+74. <any_other_token> -> EQUALTO_T
+75. <any_other_token> -> GT_T
+76. <any_other_token> -> LT_T
+77. <any_other_token> -> GTE_T
+78. <any_other_token> -> LTE_T
+79. <any_other_token> -> QUOTE_T <any_other_token>
+80. <any_other_token> -> COND_T
+81. <any_other_token> -> ELSE_T
+
+	*/
 cout << "Entering function: any_other_token() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 int errors = 0;
 //check if current token is in first and follows of respective
