@@ -1,5 +1,5 @@
 P2.out : Project2.o SetLimits.o LexicalAnalyzer.o SyntacticalAnalyzer.o
-	g++ -g -o P2.out Project2.o SetLimits.o LexicalAnalyzer.o SyntacticalAnalyzer.o
+	g++ -std=c++11  -g -o P2.out Project2.o SetLimits.o LexicalAnalyzer.o SyntacticalAnalyzer.o
 
 Project2.o : Project2.cpp SetLimits.h SyntacticalAnalyzer.h
 	g++ -g -c -std=c++11 Project2.cpp
