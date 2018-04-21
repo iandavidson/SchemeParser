@@ -1,0 +1,11 @@
+Input file: /home/faculty/tiawatts/cs460pickup/P2Tests/U39.ss
+   1: (define (divide a b) (/))
+Error at 1,24: ')' unexpected 
+Error at 1,26: '' unexpected 
+Error at 1,26: '' unexpected 
+Error at 1,26: '' unexpected 
+Error at 1,26: 'RPAREN_T' expected 
+Error at 1,26: '' unexpected 
+Error at 1,26: '' unexpected 
+Error at 1,26: 'RPAREN_T' expected 
+8 errors found in input file

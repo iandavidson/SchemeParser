@@ -1,0 +1,1 @@
+(define (abc) (list? ls))

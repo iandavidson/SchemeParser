@@ -636,7 +636,8 @@ int SyntacticalAnalyzer::stmt_pair()
 *                                                                              *
 * Parameters:                                                                  *
 * Return value: Int value of errors found                                      *
-* Description: This function will                                              *
+* Description: This function will apply the grammar rules defined below for the*
+* non-terminal state "stmt_pair_body"                                          *
 *******************************************************************************/
 int SyntacticalAnalyzer::stmt_pair_body()
 {
@@ -694,7 +695,7 @@ int SyntacticalAnalyzer::stmt_pair_body()
 * Function: action                                                             *
 *                                                                              *
 * Parameters:                                                                  *
-* Return value:   Int value of errors found                                    *
+* Return value: Int value of errors found                                      *
 * Description: This function will apply the grammar rules defined below for the*
 * non-terminal state "action"                                                  *
 *******************************************************************************/
@@ -1059,20 +1060,6 @@ if(token == LPAREN_T){//type1
 	}else if(token == ELSE_T){
 		p2file << "Using Rule 81" << endl;
 	}
-	/*
-70. <any_other_token> -> MINUS_T
-71. <any_other_token> -> DIV_T
-72. <any_other_token> -> MULT_T
-73. <any_other_token> -> MODULO_T
-74. <any_other_token> -> EQUALTO_T
-75. <any_other_token> -> GT_T
-76. <any_other_token> -> LT_T
-77. <any_other_token> -> GTE_T
-78. <any_other_token> -> LTE_T
-80. <any_other_token> -> COND_T
-81. <any_other_token> -> ELSE_T
-	*/
-
 
 	token = lex->GetToken();
 }else{
