@@ -1,0 +1,5 @@
+Input file: ./input/P61.ss
+   1: (define (notZero n)
+   2:   (not (= n 0))
+   3:   )
+0 errors found in input file

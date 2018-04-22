@@ -1,0 +1,45 @@
+Entering Program function; current token is: LPAREN_T
+Using Rule 1
+Entering function: define() with current token: LPAREN_T
+Using Rule 2
+Entering function: param_list() with current token: IDENT_T
+Using Rule 16
+Entering function: param_list() with current token: RPAREN_T
+Using Rule 17
+Exiting function: param_list() with current token: RPAREN_T
+Exiting function: param_list() with current token: RPAREN_T
+Entering function: stmt() with current token: LPAREN_T
+Using Rule 9
+Entering function: action() with current token: LT_T
+Using Rule 44
+Entering function: stmt_list() with current token: NUMLIT_T
+Using Rule 5
+Entering function: stmt() with current token: NUMLIT_T
+Using Rule 7
+Entering function: literal() with current token: NUMLIT_T
+Using Rule 10
+Exiting function: literal() with current token: NUMLIT_T
+Exiting function: stmt() with current token: NUMLIT_T
+Entering function: stmt_list() with current token: NUMLIT_T
+Using Rule 5
+Entering function: stmt() with current token: NUMLIT_T
+Using Rule 7
+Entering function: literal() with current token: NUMLIT_T
+Using Rule 10
+Exiting function: literal() with current token: RPAREN_T
+Exiting function: stmt() with current token: RPAREN_T
+Entering function: stmt_list() with current token: RPAREN_T
+Using Rule 6
+Exiting function: stmt_list() with current token: RPAREN_T
+Exiting function: stmt_list() with current token: RPAREN_T
+Exiting function: stmt_list() with current token: RPAREN_T
+Exiting function: action() with current token: RPAREN_T
+Exiting function: stmt() with current token: RPAREN_T
+Entering function: stmt_list() with current token: RPAREN_T
+Using Rule 6
+Exiting function: stmt_list() with current token: RPAREN_T
+Exiting define function; current token is: EOF_T
+Entering function: more_defines() with current token: EOF_T
+Using Rule 4
+Exiting function: more_defines() with current token: EOF_T
+Exiting Program function; current token is: EOF_T

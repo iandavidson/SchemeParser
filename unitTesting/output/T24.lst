@@ -1,3 +1,3 @@
-Input file: /home/faculty/tiawatts/cs460pickup/P2Tests/T24.ss
+Input file: ./input/T24.ss
    1: (define (isList a) (if (list? a) a 'param_passed_is_not_list)) ;rule 24 ; rule 33
 0 errors found in input file

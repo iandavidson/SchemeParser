@@ -1,0 +1,20 @@
+Input file: ./input/M60.ss
+   1: (define (or) 'or )
+	LPAREN_T        (
+	DEFINE_T        define
+	LPAREN_T        (
+	OR_T            or
+Error at 1,11: expecting first IDENT_T, found: OR_T
+Error at 1,11: Expected first of param_list; found: OR_T
+Error at 1,11: expecting first RPAREN_T, found: OR_T
+Error at 1,11: Unexpected 'OR_T' found at begining of stmt.
+	RPAREN_T        )
+Error at 1,12: expected the first of stmt but got: RPAREN_T
+	QUOTE_T         '
+Error at 1,14: Unexpected 'QUOTE_T' found at begining of more_defines.
+	OR_T            or
+Error at 1,16: Unexpected 'OR_T' found at begining of more_defines.
+	RPAREN_T        )
+Error at 1,18: Unexpected 'RPAREN_T' found at begining of more_defines.
+	EOF_T           
+8 errors found in input file

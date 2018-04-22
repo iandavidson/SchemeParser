@@ -1,4 +1,4 @@
-Input file: /home/faculty/tiawatts/cs460pickup/P2Tests/U41.ss
+Input file: ./input/U41.ss
    1: (define (mod a b)
    2:   (modulo a b)
    3:   )

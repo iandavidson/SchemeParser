@@ -1,0 +1,17 @@
+Input file: ./input/Q79.ss
+   1: (define (function)
+	LPAREN_T        (
+	DEFINE_T        define
+	LPAREN_T        (
+	IDENT_T         function
+	RPAREN_T        )
+   2:     '('a)
+	QUOTE_T         '
+	LPAREN_T        (
+	QUOTE_T         '
+	IDENT_T         a
+	RPAREN_T        )
+   3: )
+	RPAREN_T        )
+	EOF_T           
+0 errors found in input file

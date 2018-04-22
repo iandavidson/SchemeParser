@@ -1,0 +1,19 @@
+Input file: ./input/N59.ss
+   1: (define (a) ('(and)))
+	LPAREN_T        (
+	DEFINE_T        define
+	LPAREN_T        (
+	IDENT_T         a
+	RPAREN_T        )
+	LPAREN_T        (
+	QUOTE_T         '
+Error at 1,14: Unexpected 'QUOTE_T' found at the begining of action.
+	LPAREN_T        (
+Error at 1,15: Unexpected 'LPAREN_T' found at the begining of action.
+	AND_T           and
+	RPAREN_T        )
+	RPAREN_T        )
+	RPAREN_T        )
+Error at 1,21: Unexpected 'RPAREN_T' found at begining of more_defines.
+	EOF_T           
+3 errors found in input file

@@ -18,6 +18,61 @@
 
 using namespace std;
 
+
+
+
+
+/*******************************************************************************
+* Type: first and follows sets                                                 *
+*                                                                              *
+* Description:  This should contain the all of the  sets of first and follows  *
+* for the nonterminal states.												   *
+*******************************************************************************/
+
+static set<token_type> program_firsts = {LPAREN_T};
+static set<token_type> program_follows = {};
+
+static set<token_type> define_firsts = {LPAREN_T};
+static set<token_type> define_follows = {LPAREN_T, EOF_T};
+
+static set<token_type> more_defines_firsts = {LPAREN_T, EOF_T};
+static set<token_type> more_defines_follows = {EOF_T};
+
+static set<token_type> stmt_list_firsts = {IDENT_T, LPAREN_T, NUMLIT_T, STRLIT_T, QUOTE_T};
+static set<token_type> stmt_list_follows = {RPAREN_T};
+
+static set<token_type> stmt_firsts = {IDENT_T, LPAREN_T, NUMLIT_T, STRLIT_T, QUOTE_T};
+static set<token_type> stmt_follows = {IDENT_T, LPAREN_T, NUMLIT_T, STRLIT_T, QUOTE_T, RPAREN_T};
+
+static set<token_type> literal_firsts = {NUMLIT_T, STRLIT_T, QUOTE_T};
+static set<token_type> literal_follows = {IDENT_T, LPAREN_T, NUMLIT_T, STRLIT_T, QUOTE_T, RPAREN_T};
+
+static set<token_type> quoted_lit_firsts = {LPAREN_T, IDENT_T, NUMLIT_T, STRLIT_T, CONS_T, IF_T, DISPLAY_T, NEWLINE_T, LISTOP_T, AND_T, OR_T, NOT_T, DEFINE_T, NUMBERP_T, SYMBOLP_T, LISTP_T, ZEROP_T, NULLP_T, STRINGP_T, PLUS_T, MINUS_T, DIV_T, MULT_T, MODULO_T, EQUALTO_T, GT_T, LT_T, GTE_T, LTE_T, QUOTE_T, COND_T, ELSE_T};
+static set<token_type> quoted_lit_follows = {IDENT_T, LPAREN_T, NUMLIT_T, STRLIT_T, QUOTE_T, RPAREN_T};
+
+static set<token_type> more_tokens_firsts = {LPAREN_T, IDENT_T, NUMLIT_T, STRLIT_T, CONS_T, IF_T, DISPLAY_T, NEWLINE_T, LISTOP_T, AND_T, OR_T, NOT_T, DEFINE_T, NUMBERP_T, SYMBOLP_T, LISTP_T, ZEROP_T, NULLP_T, STRINGP_T, PLUS_T, MINUS_T, DIV_T, MULT_T, MODULO_T, EQUALTO_T, GT_T, LT_T, GTE_T, LTE_T, QUOTE_T, COND_T, ELSE_T};
+static set<token_type> more_tokens_follows = {RPAREN_T};
+
+static set<token_type> param_list_firsts = {IDENT_T};
+static set<token_type> param_list_follows = {RPAREN_T};
+
+static set<token_type> else_part_firsts = {IDENT_T, LPAREN_T, NUMLIT_T, STRLIT_T, QUOTE_T};
+static set<token_type> else_part_follows = {RPAREN_T};
+
+static set<token_type> stmt_pair_firsts = {LPAREN_T, RPAREN_T};
+static set<token_type> stmt_pair_follows = {RPAREN_T};
+
+static set<token_type> stmt_pair_body_firsts = {ELSE_T, IDENT_T, LPAREN_T, NUMLIT_T, STRLIT_T, QUOTE_T};
+static set<token_type> stmt_pair_body_follows = {RPAREN_T};
+
+static set<token_type> action_firsts = {IF_T, COND_T, LISTOP_T, CONS_T, AND_T, OR_T, NOT_T, NUMBERP_T, SYMBOLP_T, LISTP_T, ZEROP_T, NULLP_T, STRINGP_T, PLUS_T, MINUS_T, DIV_T, MULT_T, MODULO_T, EQUALTO_T, GT_T, LT_T, GTE_T, LTE_T, IDENT_T, DISPLAY_T, NEWLINE_T};
+static set<token_type> action_follows = {RPAREN_T};
+
+static set<token_type> any_other_token_firsts = {LPAREN_T, IDENT_T, NUMLIT_T, STRLIT_T, CONS_T, IF_T, DISPLAY_T, NEWLINE_T, LISTOP_T, AND_T, OR_T, NOT_T, DEFINE_T, NUMBERP_T, SYMBOLP_T, LISTP_T, ZEROP_T, NULLP_T, STRINGP_T, PLUS_T, MINUS_T, DIV_T, MULT_T, MODULO_T, EQUALTO_T, GT_T, LT_T, GTE_T, LTE_T, QUOTE_T, COND_T, ELSE_T};
+static set<token_type> any_other_token_follows = {LPAREN_T, IDENT_T, NUMLIT_T, STRLIT_T, CONS_T, IF_T, DISPLAY_T, NEWLINE_T, LISTOP_T, AND_T, OR_T, NOT_T, DEFINE_T, NUMBERP_T, SYMBOLP_T, LISTP_T, ZEROP_T, NULLP_T, STRINGP_T, PLUS_T, MINUS_T, DIV_T, MULT_T, MODULO_T, EQUALTO_T, GT_T, LT_T, GTE_T, LTE_T, QUOTE_T, COND_T, ELSE_T, RPAREN_T};
+
+
+
 /*******************************************************************************
 * Function: SyntacticialAnalyzer                                               *
 *                                                                              *
@@ -31,7 +86,7 @@ SyntacticalAnalyzer::SyntacticalAnalyzer (char * filename)
 	lex = new LexicalAnalyzer (filename);
 	string name = filename;
 	string p2name = name.substr (0, name.length()-3) + ".p2"; 
-	p2file.open (p2name.c_str());
+	p2file.open (p2name.c_str());// "./output/" + p2name.c_str()
 	token = lex->GetToken();
 	int errors = Program ();
 }
@@ -66,6 +121,18 @@ int SyntacticalAnalyzer::Program ()
 	int errors = 0;
 	// token should be in firsts of Program
 	// Body of function goes here.
+	set<token_type>::iterator itr1 = program_firsts.find(token);
+	set<token_type>::iterator itr2 = program_follows.find(token);
+	while(itr1 == program_firsts.end() && itr2 == program_follows.end()){
+		lex->ReportError("Unexpected \'" + lex->GetTokenName(token) + "\' found at begining of program.");
+		errors++;
+		token = lex->GetToken();
+		itr1 = program_firsts.find(token);
+		itr2 = program_follows.find(token);
+	}
+
+
+
 	p2file << "Using Rule 1" << endl;
 	
 	if(token == LPAREN_T){
@@ -115,6 +182,16 @@ int SyntacticalAnalyzer::define ()
 	int errors = 0;
 	//check if current token is in first and follows of respective
 
+	set<token_type>::iterator itr1 = define_firsts.find(token);
+	set<token_type>::iterator itr2 = define_follows.find(token);
+
+	while(itr1 == define_firsts.end() && itr2 == define_follows.end()){
+		lex->ReportError("Unexpected \'" + lex->GetTokenName(token) + "\' found at begining of define.");
+		errors++;
+		token = lex->GetToken();
+		itr1 = define_firsts.find(token);
+		itr2 = define_follows.find(token);
+	}
 
 	//do specific rule related procedure
 
@@ -202,6 +279,18 @@ int SyntacticalAnalyzer::more_defines ()
 	int errors = 0;
 	//check if current token is in first and follows of respective
 
+	set<token_type>::iterator itr1 = more_defines_firsts.find(token);
+	set<token_type>::iterator itr2 = more_defines_follows.find(token);
+
+	while(itr1 == more_defines_firsts.end() && itr2 == more_defines_follows.end()){
+
+		lex->ReportError("Unexpected \'" + lex->GetTokenName(token) + "\' found at begining of more_defines.");
+		errors++;
+		token = lex->GetToken();
+		itr1 = more_defines_firsts.find(token);
+		itr2 = more_defines_follows.find(token);
+	}
+
 
 	//do specific rule related procedure
 
@@ -254,7 +343,16 @@ int SyntacticalAnalyzer::stmt_list ()
 p2file << "Entering function: stmt_list() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 int errors = 0;
 //check if current token is in first and follows of respective
+set<token_type>::iterator itr1 = stmt_list_firsts.find(token);
+set<token_type>::iterator itr2 = stmt_list_follows.find(token);
 
+while(itr1 == stmt_list_firsts.end() && itr2 == stmt_list_follows.end()){
+	lex->ReportError("Unexpected \'" + lex->GetTokenName(token) + "\' found at begining of stmt_list.");
+	errors++;
+	token = lex->GetToken();
+	itr1 = stmt_list_firsts.find(token);
+	itr2 = stmt_list_follows.find(token);
+}
 
 //do specific rule related procedure
 
@@ -311,7 +409,16 @@ int SyntacticalAnalyzer::stmt ()
 	p2file << "Entering function: stmt() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 	int errors = 0;
 	//check if current token is in first and follows of respective
+	set<token_type>::iterator itr1 = stmt_firsts.find(token);
+	set<token_type>::iterator itr2 = stmt_follows.find(token);
 
+	while(itr1 == stmt_firsts.end() && itr2 == stmt_follows.end()){
+		lex->ReportError("Unexpected \'" + lex->GetTokenName(token) + "\' found at begining of stmt.");
+		errors++;
+		token = lex->GetToken();
+		itr1 = stmt_firsts.find(token);
+		itr2 = stmt_follows.find(token);
+	}
 
 	//do specific rule related procedure
 
@@ -377,6 +484,16 @@ int SyntacticalAnalyzer::literal ()
 	int errors = 0;
 	//check if current token is in first and follows of respective
 
+	set<token_type>::iterator itr1 = literal_firsts.find(token);
+	set<token_type>::iterator itr2 = literal_follows.find(token);
+	while(itr1 == literal_firsts.end() && itr2 == literal_follows.end()){
+		lex->ReportError("Unexpected \'" + lex->GetTokenName(token) + "\' found at begining of literal.");
+		errors++;
+		token = lex->GetToken();
+		itr1 = literal_firsts.find(token);
+		itr2 = literal_follows.find(token);
+	}
+
 
 	//do specific rule related procedure
 	if(token == NUMLIT_T || token == STRLIT_T)
@@ -431,6 +548,17 @@ int SyntacticalAnalyzer::quoted_lit ()
 	p2file << "Entering function: quoted_lit() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 	int errors = 0;
 	//check if current token is in first and follows of respective
+	set<token_type>::iterator itr1 = quoted_lit_firsts.find(token);
+	set<token_type>::iterator itr2 = quoted_lit_follows.find(token);
+	while(itr1 == quoted_lit_firsts.end() && itr2 == quoted_lit_follows.end()){
+		lex->ReportError("Unexpected \'" + lex->GetTokenName(token) + "\' found at begining of quoted_lit.");
+		errors++;
+		token = lex->GetToken();
+		itr1 = quoted_lit_firsts.find(token);
+		itr2 = quoted_lit_follows.find(token);
+	}
+
+
 
 	p2file << "Using Rule 13" << endl;
 	//do specific rule related procedure
@@ -462,16 +590,23 @@ int SyntacticalAnalyzer::more_tokens ()
 	p2file << "Entering function: more_tokens() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 	int errors = 0;
 	//check if current token is in first and follows of respective
-
-
+	set<token_type>::iterator itr1 = more_tokens_firsts.find(token);
+	set<token_type>::iterator itr2 = more_tokens_follows.find(token);
+	while(itr1 == more_tokens_firsts.end() && itr2 == more_tokens_follows.end()){
+		lex->ReportError("Unexpected \'" + lex->GetTokenName(token) + "\' found at begining of more_tokens.");
+		errors++;
+		token = lex->GetToken();
+		itr1 = more_tokens_firsts.find(token);
+		itr2 = more_tokens_follows.find(token);
+	}
 	//do specific rule related procedure
 
 
 	//make iterator to figure if token is member of any_other_token firsts'
 	//bc first of any_other_token is grossly huge
-	set<token_type>::iterator itr1 = any_other_token_firsts.find(token);
+	set<token_type>::iterator itr3 = any_other_token_firsts.find(token);
 
-	if (itr1 != any_other_token_firsts.end())
+	if (itr3 != any_other_token_firsts.end())
 	{//token is a first of any_o_t
 		p2file << "Using Rule 14" << endl;
 		errors += any_other_token();
@@ -521,6 +656,15 @@ int SyntacticalAnalyzer::param_list ()
 	int errors = 0;
 	//check if current token is in first and follows of respective
 
+	set<token_type>::iterator itr1 = param_list_firsts.find(token);
+    set<token_type>::iterator itr2 = param_list_follows.find(token);
+    while (itr1 == action_firsts.end() && itr2 == param_list_follows.end()){
+        lex->ReportError("Unexpected \'" + lex->GetTokenName(token) + "\' found at the begining of param_list.");
+        errors++;
+        token = lex->GetToken();
+        itr1 = param_list_firsts.find(token);
+        itr2 = param_list_follows.find(token);
+    }
 
 	//do specific rule related procedure
 	if(token == IDENT_T){
@@ -563,7 +707,15 @@ int SyntacticalAnalyzer::else_part ()
 	p2file << "Entering function: else_part() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 	int errors = 0;
 	//check if current token is in first and follows of respective
-
+	set<token_type>::iterator itr1 = else_part_firsts.find(token);
+    set<token_type>::iterator itr2 = else_part_follows.find(token);
+    while (itr1 == else_part_firsts.end() && itr2 == else_part_follows.end()){
+            lex->ReportError("Unexpected \'" + lex->GetTokenName(token) + "\' found at the begining of else_part.");
+            errors++;
+            token = lex->GetToken();
+            itr1 = else_part_firsts.find(token);
+            itr2 = else_part_follows.find(token);
+    }
 
 	//do specific rule related procedure
 	if(token == IDENT_T || token == LPAREN_T || token == NUMLIT_T || token == STRLIT_T || token == QUOTE_T){//first of stmt
@@ -607,6 +759,15 @@ int SyntacticalAnalyzer::stmt_pair()
 	int errors = 0;
 	//check if current token is in first and follows of respective
 
+	set<token_type>::iterator itr1 = stmt_pair_firsts.find(token);
+    set<token_type>::iterator itr2 = stmt_pair_follows.find(token);
+    while (itr1 == stmt_pair_firsts.end() && itr2 == stmt_pair_follows.end()){
+        lex->ReportError("Unexpected \'" + lex->GetTokenName(token) + "\' found at the begining of stmt_pair.");
+        errors++;
+        token = lex->GetToken();
+        itr1 = stmt_pair_firsts.find(token);
+        itr2 = stmt_pair_follows.find(token);
+    }
 
 	//do specific rule related procedure
 	if(token == LPAREN_T){
@@ -650,6 +811,18 @@ int SyntacticalAnalyzer::stmt_pair_body()
 	p2file << "Entering function: stmt_pair_body() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 	int errors = 0;
 	//check if current token is in first and follows of respective
+
+	set<token_type>::iterator itr1 = stmt_pair_body_firsts.find(token);
+    set<token_type>::iterator itr2 = stmt_pair_body_follows.find(token);
+    while (itr1 == stmt_pair_body_firsts.end() && itr2 == stmt_pair_body_follows.end()){
+        lex->ReportError("Unexpected \'" + lex->GetTokenName(token) + "\' found at the begining of stmt_pair_body.");
+        errors++;
+        token = lex->GetToken();
+        itr1 = stmt_pair_body_firsts.find(token);
+        itr2 = stmt_pair_body_follows.find(token);
+    }
+
+
 	if (token == ELSE_T){
 		p2file << "Using Rule 22" << endl;
 		token = lex->GetToken();
@@ -747,7 +920,15 @@ int SyntacticalAnalyzer::action()
 	p2file << "Entering function: action() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 	int errors = 0;
 	//check if current token is in first and follows of respective
-
+	set<token_type>::iterator itr1 = action_firsts.find(token);
+	set<token_type>::iterator itr2 = action_follows.find(token);
+	while (itr1 == action_firsts.end() && itr2 == action_follows.end()){
+		lex->ReportError("Unexpected \'" + lex->GetTokenName(token) + "\' found at the begining of action.");
+		errors++;
+		token = lex->GetToken();
+		itr1 = action_firsts.find(token);
+		itr2 = action_follows.find(token);
+	}
 
 	//do specific rule related procedure
 
@@ -949,6 +1130,19 @@ type 3
 p2file << "Entering function: any_other_token() with current token: " << lex->GetTokenName(token) << endl; //enter funct name
 int errors = 0;
 //check if current token is in first and follows of respective
+set<token_type>::iterator itr1 = any_other_token_firsts.find(token);
+set<token_type>::iterator itr2 = any_other_token_follows.find(token);
+while(itr1 == any_other_token_firsts.end() && itr2 == any_other_token_follows.end()){
+	lex->ReportError("Unexpected \'" + lex->GetTokenName(token) + "\' found at the begining of any_other_token.");
+	errors++;
+	token = lex->GetToken();
+	itr1 = any_other_token_firsts.find(token);
+	itr2 = any_other_token_follows.find(token);
+}
+
+
+
+
 if(token == LPAREN_T){//type1
 	// 50. <any_other_token> -> LPAREN_T <more_tokens> RPAREN_T
 	p2file << "Using Rule 50" << endl;

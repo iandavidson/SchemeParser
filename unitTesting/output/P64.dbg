@@ -1,0 +1,16 @@
+Input file: ./input/P64.ss
+   1: (define (symbolCheck)
+	LPAREN_T        (
+	DEFINE_T        define
+	LPAREN_T        (
+	IDENT_T         symbolCheck
+	RPAREN_T        )
+   2:   (symbol? 'a))
+	LPAREN_T        (
+	SYMBOLP_T       symbol?
+	QUOTE_T         '
+	IDENT_T         a
+	RPAREN_T        )
+	RPAREN_T        )
+	EOF_T           
+0 errors found in input file

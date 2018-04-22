@@ -1,0 +1,19 @@
+Input file: ./input/P32.ss
+   1: (define (a)
+	LPAREN_T        (
+	DEFINE_T        define
+	LPAREN_T        (
+	IDENT_T         a
+	RPAREN_T        )
+   2:   (sybol? 'a))
+	LPAREN_T        (
+	IDENT_T         sybol
+Error at 2,9: Invalid character found: ?
+	ERROR_T         ?
+Error at 2,9: Unexpected 'ERROR_T' found at begining of stmt_list.
+	QUOTE_T         '
+	IDENT_T         a
+	RPAREN_T        )
+	RPAREN_T        )
+	EOF_T           
+2 errors found in input file

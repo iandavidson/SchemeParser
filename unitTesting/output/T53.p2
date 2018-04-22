@@ -1,0 +1,27 @@
+Entering Program function; current token is: LPAREN_T
+Using Rule 1
+Entering function: define() with current token: LPAREN_T
+Using Rule 2
+Entering function: param_list() with current token: RPAREN_T
+Using Rule 17
+Exiting function: param_list() with current token: RPAREN_T
+Entering function: stmt() with current token: QUOTE_T
+Using Rule 7
+Entering function: literal() with current token: QUOTE_T
+Using Rule 12
+Entering function: quoted_lit() with current token: IDENT_T
+Using Rule 13
+Entering function: any_other_token() with current token: IDENT_T
+Using Rule 51
+Exiting function: any_other_token() with current token: RPAREN_T
+Exiting function: quoted_lit() with current token: RPAREN_T
+Exiting function: literal() with current token: RPAREN_T
+Exiting function: stmt() with current token: RPAREN_T
+Entering function: stmt_list() with current token: RPAREN_T
+Using Rule 6
+Exiting function: stmt_list() with current token: RPAREN_T
+Exiting define function; current token is: EOF_T
+Entering function: more_defines() with current token: EOF_T
+Using Rule 4
+Exiting function: more_defines() with current token: EOF_T
+Exiting Program function; current token is: EOF_T

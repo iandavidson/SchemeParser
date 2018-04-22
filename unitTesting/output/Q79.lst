@@ -1,0 +1,5 @@
+Input file: ./input/Q79.ss
+   1: (define (function)
+   2:     '('a)
+   3: )
+0 errors found in input file

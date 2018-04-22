@@ -1,3 +1,3 @@
-Input file: /home/faculty/tiawatts/cs460pickup/P2Tests/U43.ss
+Input file: ./input/U43.ss
    1: (define (greater_than a b) (>))
 0 errors found in input file

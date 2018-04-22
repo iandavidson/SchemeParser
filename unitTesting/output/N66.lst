@@ -1,0 +1,7 @@
+Input file: ./input/N66.ss
+   1: (define (a) ('(zero?)))
+Error at 1,14: Unexpected 'QUOTE_T' found at the begining of action.
+Error at 1,15: Unexpected 'LPAREN_T' found at the begining of action.
+Error at 1,21: expected the first of stmt but got: RPAREN_T
+Error at 1,23: Unexpected 'RPAREN_T' found at begining of more_defines.
+4 errors found in input file
